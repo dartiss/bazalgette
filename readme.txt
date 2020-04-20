@@ -1,5 +1,6 @@
 === Bazalgette ===
 Contributors: dartiss
+Donate link: https://artiss.blog/donate
 Tags: menu, admin, tidy, clean, housekeep
 Requires at least: 4.6
 Tested up to: 5.4

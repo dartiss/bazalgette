@@ -1,7 +1,7 @@
 <?php
 /**
 Plugin Name: Bazalgette
-Plugin URI: https://wordpress.org/plugins/bazalgette
+Plugin URI: https://github.com/dartiss/bazalgette
 Description: Automatically tidy up your cluttered admin menus
 Version: 0.1
 Author: David Artiss
@@ -32,6 +32,10 @@ function bazalgette_plugin_meta( $links, $file ) {
 		$links = array_merge( $links, array( '<a href="https://github.com/dartiss/bazalgette">' . __( 'Github', 'bazalgette' ) . '</a>' ) );
 
 		$links = array_merge( $links, array( '<a href="https://wordpress.org/support/plugin/bazalgette">' . __( 'Support', 'bazalgette' ) . '</a>' ) );
+
+		$links = array_merge( $links, array( '<a href="https://artiss.blog/donate">' . __( 'Donate', 'bazalgette' ) . '</a>' ) );
+
+		$links = array_merge( $links, array( '<a href="https://wordpress.org/support/plugin/bazalgette/reviews/#new-post">' . __( 'Write a Review', 'bazalgette' ) . '&nbsp;⭐️⭐️⭐️⭐️⭐️</a>' ) );
 	}
 
 	return $links;
