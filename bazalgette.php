@@ -1,0 +1,93 @@
+<?php
+/**
+Plugin Name: Bazalgette
+Plugin URI: https://wordpress.org/plugins/bagalgette
+Description: Automatically tidy up your cluttered admin menus
+Version: 0.1
+Author: David Artiss
+Author URI: https://artiss.blog
+Text Domain: bazalgette
+
+@package  bazalgette
+ */
+
+function bazalgette() {
+
+	global $menu;
+	global $submenu;
+
+	print_r( $menu );
+	//print_r( $submenu );
+	$output = array();
+	$i      = 0;
+
+	// Read through each main menu option.
+
+	foreach ( $menu as $array_key => $menu_array ) {
+
+		$menu_title = $menu_array[0];
+		$capability = $menu_array[1];
+		$slug       = $menu_array[2];
+		$page_title = $menu_array[3];
+		$icon       = $menu_array[6];
+
+		// Check if a menu title exists - this rules out menu spacing.
+
+		if ( $menu_title ) {
+
+			// Check if dashicon is used - if not, set a default.
+
+			//if ( 'dashicons-' !== substr( $icon, 0, 10 ) ) { $menu[ $array_key ][ 6 ] = 'dashicons-admin-plugins'; }
+
+			// If Comments or Jetpack, then these are allowed to have empty sub-menus (Jetpack has no sub-menus before initially setting up)
+
+			if ( 'jetpack' !== $slug && 'edit-comments.php' !== $slug ) {
+
+				// Check if a sub-menu exists. 
+
+				if ( isset( $submenu[ $slug ] ) ) {
+
+					// Loop through the sub-menus for the current menu item.
+
+					$sub_array = $submenu[ $slug ];
+
+					foreach ( $sub_array as $submenu_array ) {
+
+						$submenu_title = $submenu_array[0];
+						$subpage_title = $submenu_array[3];
+
+						// Remove any sub-menus trying to sell us something!
+
+						$title = strtolower( $submenu_title );
+						if ( strpos( $title, 'upgrade' ) !== false || strpos( $title, 'go pro' ) !== false ) {
+							unset( $menu[ $array_key ][ $array_key ] );
+						}
+					}
+
+					// Check if any other sub-menus still exist. If not, delete the top-menu.
+
+					if ( ! isset( $submenu[ $slug ] ) ) {
+						unset( $menu[ $array_key ] );
+					}
+				} else {
+
+					echo '::' . $array_key . '::';
+
+					// When no sub-menu exists, move the menu option to settings.
+
+					unset( $menu[ $array_key ] );
+					$sub_array = array(
+						0 => $menu_title,
+						1 => $capability,
+						2 => $slug,
+						3 => $page_title,
+					);
+					array_push( $submenu['options-general.php'], $sub_array );
+
+				}
+			}
+		}
+	}
+}
+
+add_action( 'admin_init', 'bazalgette' );
