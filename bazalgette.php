@@ -8,7 +8,7 @@ Author: David Artiss
 Author URI: https://artiss.blog
 Text Domain: bazalgette
 
-@package  bazalgette
+@package bazalgette
  */
 
 function bazalgette() {
@@ -37,9 +37,13 @@ function bazalgette() {
 
 			// Check if dashicon is used - if not, set a default.
 
-			//if ( 'dashicons-' !== substr( $icon, 0, 10 ) ) { $menu[ $array_key ][ 6 ] = 'dashicons-admin-plugins'; }
+			if ( 'dashicons-' !== substr( $icon, 0, 10 ) ) {
+				$menu[ $array_key ][6] = 'dashicons-admin-plugins';
+			}
 
-			// If Comments or Jetpack, then these are allowed to have empty sub-menus (Jetpack has no sub-menus before initially setting up)
+			// Rename menu, if inappropriate.
+
+			// If Comments or Jetpack, then these are allowed to have empty sub-menus (Jetpack has no sub-menus before initially setting up).
 
 			if ( 'jetpack' !== $slug && 'edit-comments.php' !== $slug ) {
 
@@ -51,16 +55,26 @@ function bazalgette() {
 
 					$sub_array = $submenu[ $slug ];
 
-					foreach ( $sub_array as $submenu_array ) {
+					foreach ( $sub_array as $sub_array_key => $submenu_array ) {
 
-						$submenu_title = $submenu_array[0];
-						$subpage_title = $submenu_array[3];
+						$submenu_title      = $submenu_array[0];
+						$submenu_capability = $submenu_array[1];
+						$subpage_link       = $submenu_array[2];
+						$subpage_title      = $submenu_array[3];
 
 						// Remove any sub-menus trying to sell us something!
 
 						$title = strtolower( $submenu_title );
-						if ( strpos( $title, 'upgrade' ) !== false || strpos( $title, 'go pro' ) !== false ) {
-							unset( $menu[ $array_key ][ $array_key ] );
+
+						if ( strpos( $title, 'upgrade' ) !== false || 'pro' == substr( $title, -3, 3 ) || 'pro!' == substr( $title, -4, 4 ) || strpos( $title, 'addon' ) !== false || strpos( $title, 'add-on' ) !== false || strpos( $title, ' extend' ) !== false || strpos( $title, 'affiliat' ) !== false ) {
+							unset( $submenu[ $slug ][ $sub_array_key ] );
+						}
+
+						// Move any setting sub-menus to Settings.
+
+						if ( ( strpos( $title, 'settings' ) !== false || strpos( $title, 'options' ) !== false ) && ( 'Settings' !== $menu_title ) ) {
+							add_submenu_page( 'options-general.php', $page_title, $menu_title, $submenu_capability, $slug );
+							unset( $submenu[ $slug ][ $sub_array_key ] );
 						}
 					}
 
@@ -71,18 +85,16 @@ function bazalgette() {
 					}
 				} else {
 
-					echo '::' . $array_key . '::';
-
 					// When no sub-menu exists, move the menu option to settings.
 
-					unset( $menu[ $array_key ] );
-					$sub_array = array(
-						0 => $menu_title,
-						1 => $capability,
-						2 => $slug,
-						3 => $page_title,
-					);
-					array_push( $submenu['options-general.php'], $sub_array );
+					//unset( $menu[ $array_key ] );
+					//$sub_array = array(
+					//	0 => $menu_title,
+					//	1 => $capability,
+					//	2 => $slug,
+					//	3 => $page_title,
+					//);
+					//array_push( $submenu['options-general.php'], $sub_array );
 
 				}
 			}
