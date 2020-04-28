@@ -11,12 +11,17 @@ Text Domain: bazalgette
 @package bazalgette
  */
 
+/**
+ * Add meta to plugin details
+ *
+ * Add options to plugin meta line
+ */
 function bazalgette() {
 
 	global $menu;
 	global $submenu;
 
-	print_r( $menu );
+	//print_r( $menu );
 	//print_r( $submenu );
 	$output = array();
 	$i      = 0;
@@ -57,14 +62,25 @@ function bazalgette() {
 
 					foreach ( $sub_array as $sub_array_key => $submenu_array ) {
 
+						// Extract the individual elements from the sub-menu array.
+
 						$submenu_title      = $submenu_array[0];
 						$submenu_capability = $submenu_array[1];
 						$subpage_link       = $submenu_array[2];
 						$subpage_title      = $submenu_array[3];
 
+						// Create a new array, if the sub-menu needs moving elsewhere.
+
+						$sub_to_add = array(
+							0 => $menu_title,
+							1 => $capability,
+							2 => $slug,
+							3 => $page_title,
+						);
+
 						// Remove any sub-menus trying to sell us something!
 
-						$title = strtolower( $submenu_title );
+						$title = strtolower( wp_strip_all_tags( $submenu_title ) );
 
 						if ( strpos( $title, 'upgrade' ) !== false || 'pro' == substr( $title, -3, 3 ) || 'pro!' == substr( $title, -4, 4 ) || strpos( $title, 'addon' ) !== false || strpos( $title, 'add-on' ) !== false || strpos( $title, ' extend' ) !== false || strpos( $title, 'affiliat' ) !== false ) {
 							unset( $submenu[ $slug ][ $sub_array_key ] );
@@ -73,7 +89,14 @@ function bazalgette() {
 						// Move any setting sub-menus to Settings.
 
 						if ( ( strpos( $title, 'settings' ) !== false || strpos( $title, 'options' ) !== false ) && ( 'Settings' !== $menu_title ) ) {
-							add_submenu_page( 'options-general.php', $page_title, $menu_title, $submenu_capability, $slug );
+							array_push( $submenu['options-general.php'], $sub_to_add );
+							unset( $submenu[ $slug ][ $sub_array_key ] );
+						}
+
+						// Move any tools sub-menus to Tools.
+
+						if ( 'tools' == $title && 'Tools' !== $menu_title ) {
+							array_push( $submenu['tools.php'], $sub_to_add );
 							unset( $submenu[ $slug ][ $sub_array_key ] );
 						}
 					}
@@ -83,7 +106,7 @@ function bazalgette() {
 					if ( ! isset( $submenu[ $slug ] ) ) {
 						unset( $menu[ $array_key ] );
 					}
-				} else {
+				//} else {
 
 					// When no sub-menu exists, move the menu option to settings.
 
