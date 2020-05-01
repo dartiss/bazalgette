@@ -21,9 +21,8 @@ function bazalgette() {
 	$cache = get_transient( 'bazalgette' );
 
 	if ( $hash != $cache['hash'] ) {
+	//if ( 1 == 1 ) { // Use this line in preference to the one above to switch off cache (for testing).
 
-		// print_r( $menu );
-		// print_r( $submenu );
 		$output = array();
 		$i      = 0;
 
@@ -46,8 +45,6 @@ function bazalgette() {
 				if ( 'dashicons-' !== substr( $icon, 0, 10 ) ) {
 					$menu[ $array_key ][6] = 'dashicons-admin-plugins';
 				}
-
-				// Rename menu, if inappropriate.
 
 				// If Comments or Jetpack, then these are allowed to have empty sub-menus (Jetpack has no sub-menus before initially setting up).
 
@@ -80,7 +77,21 @@ function bazalgette() {
 								3 => $page_title,
 							);
 
-							$title = strtolower( wp_strip_all_tags( $submenu_title ) );
+							// Strip sub-menus of un-needed code. Those with number counts in them are excluded.
+
+							if ( strpos( $submenu_title, 'update-plugins' ) !== false ) {
+								$title = $submenu_title;
+							} else {
+								$title = wp_strip_all_tags( $submenu_title );
+							}
+
+							// If the title has changed, update it!
+
+							if ( $title != $submenu_title ) {
+								$submenu[ $slug ][ $sub_array_key ][0] = $title;
+							}
+
+							$title = strtolower( $title );
 
 							// Remove any sub-menus trying to sell us something!
 
@@ -129,24 +140,12 @@ function bazalgette() {
 							}
 						}
 
-						// Check if any other sub-menus still exist. If not, delete the top-menu.
+						// Check if any other sub-menus still exist. If not, and it's a result of all the above processing, delete the top-menu.
+						// If I didn't do anything to cause this, then we need to keep the menu in place.
 
 						if ( 0 == count( $submenu[ $slug ] ) && 1 < $removed ) {
 							unset( $menu[ $array_key ] );
 						}
-					// } else {
-
-						// When no sub-menu exists, move the menu option to settings.
-
-						// unset( $menu[ $array_key ] );
-						// $sub_array = array(
-						//	0 => $menu_title,
-						//	1 => $capability,
-						//	2 => $slug,
-						//	3 => $page_title,
-						// );
-						// array_push( $submenu['options-general.php'], $sub_array );
-
 					}
 				}
 			}
