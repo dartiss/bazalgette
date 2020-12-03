@@ -3,9 +3,9 @@ Contributors: dartiss
 Donate link: https://artiss.blog/donate
 Tags: menu, admin, tidy, clean, housekeep
 Requires at least: 4.6
-Tested up to: 5.4
+Tested up to: 5.6
 Requires PHP: 5.3
-Stable tag: 0.1
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,7 +32,9 @@ Here's the science...
 * Gutenberg ready
 * GDPR compliant
 
-Please visit the [Github page](https://github.com/dartiss/bazalgette) for the latest code development, planned enhancements and known issues.
+Iconography is courtesy of the very talented [Janki Rathod](https://www.fiverr.com/jankirathore) ♥️
+
+👉 Please visit the [Github page](https://github.com/dartiss/bazalgette "Github") for the latest code development, planned enhancements and known issues 👈
 
 == Installation ==
 
@@ -55,12 +57,12 @@ Feedback is everything! Please get in touch and let me know, either via the [Wor
 
 == Changelog ==
 
-[Learn more about my version numbering methodology](https://artiss.blog/2016/09/wordpress-plugin-versioning/ "WordPress Plugin Versioning")
+I use semantic versioning, with the first release being 1.0.
 
-= 0.1 =
+= 1.0 =
 * Initial release.
 
 == Upgrade Notice ==
 
-= 0.1 =
+= 1.0 =
 * Initial release.
