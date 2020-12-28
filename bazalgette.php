@@ -6,7 +6,7 @@
  * @author            David Artiss
  * @license           GPL-2.0-or-later
  *
- * Plugin Name:       Plugin Skeleton
+ * Plugin Name:       Bazalgette
  * Plugin URI:        https://wordpress.org/plugins/bazalgette/
  * Description:       Automatically tidy up your cluttered admin menus.
  * Version:           1.0
@@ -31,3 +31,5 @@
 require_once plugin_dir_path( __FILE__ ) . 'inc/admin.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'inc/menu-clean.php';
+
+require_once plugin_dir_path( __FILE__ ) . 'inc/assign-dashicon.php';

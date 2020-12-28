@@ -18,7 +18,7 @@
  */
 function bazalgette_plugin_meta( $links, $file ) {
 
-	if ( false !== strpos( $file, 'plugin_skeleton.php' ) ) {
+	if ( false !== strpos( $file, 'bazalgette.php' ) ) {
 
 		$links = array_merge(
 			$links,
